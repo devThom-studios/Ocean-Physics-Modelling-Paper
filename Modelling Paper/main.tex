@@ -1,0 +1,354 @@
+\documentclass[12pt]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[a4paper,top=30mm,bottom=30mm]{geometry}
+\usepackage{adjustbox}
+\usepackage{setspace}
+\usepackage{natbib}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{caption}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+\floatplacement{figure}{H} % forces figures to be placed at the correct location
+
+
+%\singlespacing
+
+
+\begin{document}
+
+\begin{titlepage}
+   \begin{center}
+       \vspace*{3cm}
+
+       {\fontsize{15}{15}\selectfont \textbf {Investigating the Impacts of Wind Forcing on Southern Ocean Circulation and Ventilation Using the MITgcm:}\\A Comparative Analysis of Control and Sensitivity Simulations\\ }
+       \rule{\textwidth}{4pt}
+
+       \vspace{1.2cm}
+        {\fontsize{12}{14}\selectfont Ocean Physics (ATOC 568)\\Modelling Paper}\\
+            
+       \vspace{1.5cm}
+
+       {\fontsize{14}{16}\selectfont \textbf{261121054}}
+       
+  
+       \vspace{1.5cm}
+     
+       {\fontsize{12}{14}\selectfont Department of Atmospheric and Oceanic Sciences\\
+       McGill University, Canada\\
+       April 21, 2023}\\
+       \begin{figure}[htp]
+            \centering
+            \begin{adjustbox}{frame=1pt 10pt 1pt 15pt,clip,margin=0.1cm}
+                \includegraphics[scale=0.04]{McGill_University_CoA.svg.png}
+            \end{adjustbox}
+       \end{figure}
+            
+   \end{center}
+\end{titlepage}
+
+\tableofcontents
+
+
+
+
+\newpage
+
+\section{Introduction}
+\rule{\textwidth}{0.4pt}\\
+The ocean plays a crucial role in controlling how much heat is distributed over the planet, storing carbon, and cycling nutrients. It is a vital part of the Earth's climate system. Understanding the dynamics of these processes and how they respond to external forcings is crucial for forecasting how the global climate system will behave. Ocean circulation and ventilation are two crucial processes that have a direct impact on these functions. Wind forcing is one of the main factors influencing ocean circulation, notably in the Southern Ocean where it affects the Antarctic Circumpolar Current (ACC) and the Meridional Overturning Circulation (MOC).\\ 
+
+\noindent The Southern Ocean is famous for its steady and forceful winds, which have earned it the names Roaring Forties, Furious Fifties, and Screaming Sixties. It stands out from other oceans because it flows continuously around the world without any land mass obstruction. The Southern Ocean is crucial in connecting together all of the oceans on Earth and affecting climate. This is particularly true given that the ACC, which continuously sweeps eastward around Antarctica, is carried by the Southern Ocean.  The ACC is the strongest ocean current in the world, connecting the Atlantic, Indian, and Pacific Oceans. It plays a vital role in the redistributing of heat, carbon, and nutrients globally \citep{rintoul2001antarctic}. On the other hand, MOC is a basin-scale circulation pattern that involves the transport of warm surface waters to high latitudes, where they cool, sink and return to lower latitudes as deep water currents \citep{talley2013closure}. This process has a significant influence on the global heat and carbon budgets \citep{rahmstorf2006thermohaline}.\\
+
+
+
+
+\noindent In recent years, there has been a growing interest in understanding the impacts of wind forcing on ocean circulation and ventilation \citep{meredith2006circumpolar,spence2014rapid}. Previous research has made strides in understanding the impacts of wind forcing on ocean circulation and ventilation (eg. \citealp{marshall2012closure,farneti2015assessment,morrison2015upwelling,boning2008response}). However, the complex interactions between these processes and their subsequent effects on the global climate system remain an open question. \cite{marshall2012closure} highlighted the importance of wind forcing in driving ACC and MOC, with the latter playing a crucial role in the redistribution of heat and carbon. \citep{boning2008response} demonstrated that the Antarctic Circumpolar Current (ACC) has intensified and shifted poleward due to increased zonal wind stress associated with changes in the Southern Annular Mode\cite{farneti2015assessment} focused on the role of wind stress in modulating the ACC transport, suggesting that an increase in wind stress could lead to a strengthening of the ACC. In contrast, \cite{morrison2015upwelling} argued that the response of the ACC to wind stress changes might be more complex than previously thought, with potential feedback between the ACC, the MOC, and the global climate system. Regarding ventilation, studies such as \cite{sallee2013assessment}  and \cite{downes2011impacts} have shown that wind forcing can influence the depths of the mixed layer and the age tracer in the Southern Ocean, with potential implications for carbon sequestration and nutrient cycling. \\
+ 
+ 
+\noindent Despite advances in our understanding of the role of wind forcing in driving ocean circulation and ventilation, there are still significant gaps in our knowledge about the precise mechanisms and interactions involved. In particular, the response of the ACC and MOC to wind forcing and their subsequent impacts on the global climate system are not fully understood. 
+This study aims to address the following question: How do changes in wind forcing affect the ocean circulation (ACC transport and MOC) and ventilation (mixed layer depths and age tracer) in the Southern Ocean and what are the implications for the global climate system?  By exploring this question, this paper seeks to contribute to our understanding of these processes and their potential impacts on the Earth's climate system; thus, to address these gaps in knowledge, our study investigates the response of ocean circulation (ACC transport and MOC) and ventilation (mixed layer depths and age tracer) to wind forcing in the Southern Ocean. Using the Massachusetts Institute of Technology general circulation model (MITgcm), we compare control and sensitivity simulations to gain insights into the mechanisms underlying the ocean's response to wind forcing. Our findings can inform future climate projections and guide the development of more accurate and comprehensive climate models.\\
+
+\noindent The remainder of this paper is structured as follows: Section 2 describes the methodology, including the Massachusetts Institute of Technology general circulation model (MITgcm), control and sensitivity simulations, and observational data used for comparison. Section 3 presents the main results, focusing on the response of ocean circulation and ventilation to wind forcing. Section 4 discusses these results in light of the existing literature and the limitations of our study. Finally, Section 5 concludes the paper and suggests future research directions that could further advance our understanding of the complex interactions between wind forcing, ocean circulation, and ventilation.
+
+%---------------------------------
+\newpage
+\section{Method}
+\rule{\textwidth}{0.4pt}
+In this study, we used the MITgcm to investigate the ocean's response to changes in wind forcing.  Our methodology is divided into three subsections: an overview and configurations of the MITgcm, a description of the control and sensitivity simulations and model evaluation and comparison.
+
+\subsection{MITgcm Overview and Configuration}
+MITgcm is a widely portable circulation model designed for studying a wide range of scales in both the ocean and the atmosphere. The model is rooted in the incompressible Navier-Stokes equations and can include the non-hydrostatic terms that are important in mixing processes. In the hydrostatic limit, an isomorphism between height based-coordinates and pressure based-coordinates allows the same dynamical kernel to drive an atmospheric model. The model uses finite-volume methods and orthogonal curvilinear coordinates in the horizontal that can accommodate novel spherical grids such as that based on the conformally expanded spherical cube \citep{adcroft2018mitgcm}. The MITgcm has been used in numerous studies over the years. For example, \cite{gopalakrishnan2013state} used MITgcm for estimating and forecasting the Gulf of Mexico loop current. \cite{zheng2021evaluation} used it to assess Arctic sea ice cover and thickness. \cite{adcroft1997representation} described a technique used in the MITgcm for representing complex topography in ocean models. In the field of oceanographic and atmospheric studies, MITgcm is widespread and has been used to solve various problems, including understanding ocean current dynamics, modeling the impact of climate change on sea level rise, and researching the impact of hurricanes on coastal areas. \\
+
+
+\noindent In this study, the model domain was configured using a spherical polar coordinate system (usingSphericalPolarGrid=.TRUE.), with a southern boundary at 80°S (ygOrigin). It was employed at a $4 ^{\circ} \times 4 ^{\circ} $ (dxSpacing and dySpacing) horizontal grid spacing resolution. This relatively coarse resolution is a balance between computational efficiency and the ability to capture large-scale ocean circulation and ventilation patterns. At this resolution, the model can reasonably represent the main features of the global ocean circulation, including the MOC and the Antarctic Circumpolar Current ACC, while keeping computational costs manageable. The vertical grid spacing was determined by the delR parameter allowing for a more detailed representation of the ocean's vertical structure. 
+
+\subsection{Control and Sensitivity Simulations}
+The control experiment was initialized using pickup files obtained from a $100-year$ spin-up simulation. The simulation was run for $10$ year, with a time step of $3600s$. The pickup frequency (pChkptFreq) was set to the length of the simulation ($10$ years), and the same value was used for dumpFreq, taveFreq, and monitorFreq. The input files included bathymetry data, surface wind stresses, surface heat and freshwater fluxes, 3D climatological fields of potential temperature and salinity, and surface relaxation values for temperature and salinity. The forcing cycle (externForcingCycle) and period (externForcingPeriod) were set to one year and one month, respectively. Restoring timescales for surface temperature (tauThetaClimRelax) and salinity (tauSaltClimRelax) were set to 2 and 6 months, respectively. We ran the 10-year control experiment after initializing, manipulating, copying, or activating some namelist files such as data.mnc, data.diagnostics, data.pkg, etc. in our directory. As a result, new files and directories were produced including new pickup files, including output.txt, which contains details such as parameter values and diagnostics, as well as STDERR.0000, an error message that includes bug reports.\\
+
+\noindent The control and sensitivity simulations were designed to investigate the ocean's response to changes in wind forcing at a global scale. The control simulation provided a baseline to assess the model's performance in capturing key aspects of ocean circulation under present-day conditions. To explore the impact of different wind stress forcings, we conducted two sensitivity experiments by modifying the zonal wind stress forcing south of 30°S. In the control simulation, we used standard wind stress data to initialize the model and conducted a 10-year experiment. This simulation helped us understand the model's ability to reproduce realistic ocean circulation patterns and provided a reference point for comparing the sensitivity experiments. The sensitivity simulations consisted of two experiments: In the first experiment(strong wind), the zonal wind stress south of 30°S was increased by $1.5$ times simulating a scenario with stronger winds, while in the second experiment(weak wind), wind stress was decreased by $0.5$ times representing a scenario with weaker winds. Both experiments followed the same procedures as the control experiment. These sensitivity experiments allow us to explore the impact of altered wind stress forcings on ocean circulation and climate.
+
+
+
+\subsection{Model Evaluation and Comparison}
+\subsubsection{Surface Temperature, Surface Salinity, and Mixed Layer Depth}
+To assess the accuracy of the model, we generated plots comparing surface temperature, salinity, and summer and winter mixed layer depths with observations.
+For each variable, we plotted the model(control) field, the observational field, and the response (i.e model minus the observation field).  We compared the modeled surface temperature and salinity fields with observed data. By plotting the model fields, observational fields, and the differences between the two (model minus observation), we could evaluate the model's ability to capture spatial patterns and magnitudes of these essential ocean properties. 
+
+\begin{figure}
+    \begin{center}
+    \adjustimage{max size={1\linewidth}{1\paperheight}}{intro pics/method1.jpg}
+    \caption{Control and Observational Sea Surface Temperature and Salinity}
+    \addcontentsline{toc}{subsection}{\protect\numberline{}Figure \ref{fig:firstplot}: Control and Observational Sea Surface Temperature and Salinity}
+    \label{fig:firstplot}
+    \end{center}
+\end{figure}
+
+\noindent Figure \ref{fig:firstplot} shows the Sea Surface Salinity (SSS) and Sea Surface Temperature (SST) of the observations, the control, and the difference field. The control simulation results closely match the observations for both the SSS and SST plots, respectively. The positive difference (control - observation) indicates that the control simulation has higher values compared to the observational data. This could mean that the model is overestimating the variable in certain regions or under specific conditions. Conversely, a negative difference (control - observation) implies that the control simulation has lower values for a specific variable compared to the observational data. In this case, the model might be underestimating the variable in certain areas or under particular conditions. From the plots, the difference between the control and the observations field for both the SSS and SST shows a positive bias. This observation implies that the model accurately represents the system's behavior of the observations, as it exhibits minimal differences. However, it can be seen that the positive values (control - observation $>$ 0) are dominating.
+
+
+\begin{figure}
+    \begin{center}
+    \adjustimage{max size={1\linewidth}{1\paperheight}}{intro pics/method2 (1).jpg}
+    \caption{Control and Observational Field of Summer and Winter Mixed layer depth}
+    \addcontentsline{toc}{subsection}{\protect\numberline{}Figure \ref{fig:secondplot}: Control and Observational Field of Summer and Winter Mixed Layer Depth}
+    \label{fig:secondplot}
+    \end{center}
+\end{figure}
+
+\noindent We also compared the summer and winter mixed layer depths simulated by the model with observations. These comparisons allowed us to assess the model's performance in reproducing seasonal variability in the mixed layer depths, which are crucial for understanding ocean-atmosphere interactions and heat storage in the ocean.  The MITgcm model's density threshold approach was used to determine the mixed layer depth. It was specified as the depth at which the density rose relative to the surface, equating to a 0.8°C drop in temperature from the immediate surface circumstances. In other words, the depth of the mixed layer is defined as the depth at which the temperature falls by 0.8°C below the surface.
+\begin{equation}
+    \sigma_0 = \sigma_0(\theta_0, S_0, P_0) + \Delta \sigma_0
+\end{equation}
+with
+\begin{equation}
+    \Delta \sigma_0 = \sigma_0(\theta_0 - 0.8^\circ C, S_0, P_0)-\sigma_0(\theta_0, S_0, P_0).
+\end{equation}
+where $\sigma_0,\theta_0, S_0$ and $P_0 $ are potential density, potential temperature, salinity and pressure with suffix 0 corresponding to the surface.\\
+
+\noindent Figure \ref{fig:secondplot} presents the summer and winter mixed layer depths (MLD) for the observations, control simulation, and the difference between them. The control simulation captures the general pattern of the MLD in both summer and winter seasons, as observed in the comparison with the observational data. From the plots, the differences between the control simulation and the observations for both summer and winter MLDs exhibit predominantly positive biases. This suggests that the model reasonably represents the observed MLD behavior but tends to overestimate the mixed layer depths in certain regions. This could be due to a variety of factors, such as errors in the input parameters, incomplete or inaccurate understanding of the physical processes, or limitations of the numerical model. \\
+
+\noindent These comparisons allowed us to identify and quantify potential biases in the model's representation of key ocean properties. Additionally, these plots provided insights into the model's ability to capture the ocean's response to wind forcing changes in line with our investigation's purpose.
+
+
+
+
+\subsubsection{Control MOC, ACC Transport and Age Tracer}\label{sec:CAA}
+We computed the Age Tracer,  ACC transport, and the MOC to better understand the ocean's circulation and Ventilation. Age tracers were calculated by finding the zonal average of the diagnostic parameter called TRAC01. This will provide a valuable tool for understanding the ventilation process in the ocean. For ACC transport, we selected an appropriate longitude intersecting the Antarctic Peninsula and South America and used the zonal velocity variable (UVELMASS) to calculate transport in Sverdrups (Sv) (Equation \ref{three}). We plotted the time series of the control ACC transport starting from year 0 of the spinup, and the control MOC (Figure \ref{fig:thirdplot}) and then compared the model transport with observations from \citep{donohue2016mean}. 
+\begin{equation}\label{three}
+\mathit{ACCtransport}=\int_{\mathit{bottom}}^{\mathit{surface}}UVELMASS\, \mathit{hfac} \,dy\,dz
+\end{equation}  \\
+
+\noindent The time series of ACC transport, as shown in Figure \ref{fig:thirdplot}, provides insight into the long-term behavior and variability of the ACC in the control simulation. In the  plot, the transport values (in Sverdrups) are shown over the simulation period (years). This plot reveals a decreasing trend which imply a weakening of the ACC. The decreasing trend in the time series plot for the control simulation follows the trend observed in the pickup file, it indicates that the model successfully maintains the initial conditions and captures the key processes driving the ACC's behavior over the simulation period. This consistency between the control simulation and the pickup file shows that the model is accurately representing the system and provides valuable information for understanding the factors affecting the ACC. The continuation of the pickup trend in the control simulation is a positive indication.\\
+
+\noindent For MOC analysis,  both the GM (Gent \& McWilliams) component (Equation \ref{four}) and the Eulerian-mean component (Equation \ref{five}) were calculated using the annually averaged GM Bolus meridional transport stream function  and the annually averaged meridional velocity (variable VVELMASS) respectively. We then summed both components to obtain the residual MOC (Equation \ref{six}) in depth coordinates and plotted the 10-year averaged residual MOC with colors and contours. $\overline{\Psi}$ (resolved flow)
+was given by the velocity output and $\Psi^{*}$ was given by the gmredi package. The Gent and McWilliams (1990, hereafter GM90) scheme is employed to parameterize the effects of unresolved mesoscale eddies \citep{spence2010southern}.
+
+
+\begin{equation}\label{four}
+    \Psi^{*}=\oint\mathit{GM_{PsiY}}\,dx
+\end{equation}
+
+\begin{equation}\label{five}
+\overline{\Psi}(t, y, z) = -\oint \int_{\mathit{bottom}}^{z} \mathit{VVELMASS}(t, y, z')\,\mathit{hfac}\,dz'\,dx
+\end{equation}
+
+\begin{equation}\label{six}
+\Psi_{res} = \overline{\Psi}+\Psi^{*}
+\end{equation}
+\begin{figure}
+    \begin{center}
+    \adjustimage{max size={1\linewidth}{1\paperheight}}{intro pics/method3.jpg}
+    \caption{Time series of Antarctic Circumpolar Circulation}
+    \addcontentsline{toc}{subsection}{\protect\numberline{}Figure \ref{fig:thirdplot}: Time series of Control Meridional Overturning Circulation}
+    \label{fig:thirdplot}
+    \end{center}
+\end{figure}
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{figure}
+    \begin{center}
+    \adjustimage{max size={1\linewidth}{1\paperheight}}{intro pics/method4-.jpg}
+    \caption{Residual Meridional Overturning Circulation of the Control Experiment}
+    \addcontentsline{toc}{subsection}{\protect\numberline{}Figure \ref{fig:fourthplot}: Residual Meridional Overturning Circulation of the Control Experiment}
+    \label{fig:fourthplot}
+    \end{center}
+\end{figure}
+
+\noindent Figure \ref{fig:fourthplot} provides valuable insights into the ocean's circulation and its role in the Earth's climate system. This plot shows the combined effect of the Eulerian-mean circulation and the circulation associated with mesoscale eddies, revealing the overall structure and transport of the MOC in the model simulation. The MOC plays a critical role in redistributing heat, salt, and other properties throughout the ocean and directly impacts the climate system. In the plot, it is observed that contours representing the MOC's strength in units of Sverdrups (Sv), with positive values denoting a clockwise (or northward) circulation ranges with magnitudes between 17 and 52 Sv and depths from 0 to about 2000 meters and negative values indicating an anticlockwise lower cell strength ranging between 8 and 27 Sv. This circulation is known as the Deacon Cell \citep{farneti2015assessment,doos1994deacon,speer2000diabatic}.\\
+
+\noindent We compared our control MOC plot with the results of published studies such as \citep{farneti2015assessment} that have used MITgcm or other similar models to investigate the MOC. The  control MOC plot exhibited a structure, extent, and intensity consistent with MOC patterns found in other studies. The position and strength of overturning cells, as well as the depth of the circulation, aligned well with the literature. This consistency indicates that our model is performing well and realistically representing the MOC. However, there may some discrepancies between our control MOC plot and the MOC plots from other studies. These differences may arise from variations in model setup, forcing, or parameterizations. To better understand the robustness of our model and identify areas for improvement, we performed sensitivity experiments by varying the zonal wind stress. This will help us recognize the factors that influenced the MOC in our control simulation and suggest areas for further research or model improvements. By incorporating these analyses into our method, we achieved a comprehensive investigation of the ocean's response to changes in wind forcing and its impact on global circulation and climate dynamics.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+\section{Results}
+\rule{\textwidth}{0.4pt}
+The findings of this study demonstrate a significant response of ocean circulation to changes in wind forcing, specifically in the context of the Antarctic Circumpolar Current (ACC, MOC and Ventilation. 
+
+\subsection{Wind-Forced Southern Ocean Circulation: Insights from ACC Transport and MOC}
+
+The ACC has been shown to be strongly influenced by wind forcing, which drives the oceanic circulation around Antarctica. The wind force affects the ACC in several ways, including its strength, variability, and position. Figure \ref{fig:R2a} shows the time mean between the ACC Transport Maximum and the Zonal Wind Stress of the three simulations. In the control scenario, the ACC transport exhibits a baseline strength, representing the model's realistic flow field. In the strong wind forcing scenario, zonal wind stress is increased compared to the control simulation. This enhanced wind stress results in a more vigorous and robust ACC transport. The stronger ACC is more effective at redistributing heat, salt, and other properties, which can influence ocean circulation patterns, heat uptake, and carbon sequestration in the Southern Ocean. In the weak wind forcing scenario, zonal wind stress is reduced compared to the control simulation. With less wind stress acting on the ocean surface, ACC transport is expected to weaken. The reduced ACC strength implies that there will be less efficient transport of heat, salt, and other properties across the Southern Ocean.\\
+
+
+\noindent The strength and position of the ACC affect the strength and position of the MOC \citep{marshall2012closure}. The spatial plots of the MOC components (Eulerian, GM, and residual) presented in Figure \ref{fig:R1} reveal valuable insights into the behavior of these components when responding to changes in wind forcing. The MOC, a critical part of the global climate system, is characterized by positive and negative values, as well as clockwise and counterclockwise circulations, which reflect the direction and strength of the circulation cells within the ocean. The positive values in the MOC plots represent the northward flow of warm surface water, while the negative values indicate the southward flow of cold deep water. The clockwise circulation corresponds to the movement of warm surface waters poleward and cold deep waters equatorward, while the counterclockwise circulation involves the opposite pattern. This pattern of alternating positive and negative values, as well as clockwise and counterclockwise circulations, represents continuous overturning cells that help transport heat, salt, and other properties throughout the world's oceans.\\
+
+\begin{figure}
+    \begin{center}
+    \adjustimage{max size={1\linewidth}{1\paperheight}}{result pics/Result 2a.jpg}
+    \caption{Time Mean Zonally Averaged Zonal Wind Stress Maximum versus Maximum of the ACC transport}
+    \addcontentsline{toc}{subsection}{\protect\numberline{}Figure \ref{fig:R2a}: Wind Stress Maximum versus Maximum of the ACC transport}
+    \label{fig:R2a}
+    \end{center}
+\end{figure}
+
+
+\noindent In the control scenario, the spatial plots display the baseline distributions of the Eulerian, GM, and Residual components of the MOC, with maximum values of about 52, 10, and 54 sv, respectively. These values provide a reference for examining how the MOC components change in response to varying wind forcing conditions and how the clockwise and counterclockwise circulations may be affected. Under the weak wind forcing scenario, the Eulerian component of the MOC exhibits a decrease in the intensity of both the upper (positive values, clockwise circulation) and lower (negative values, counterclockwise circulation) overturning cells. This reduction indicates a weakening of the northward flow of warm surface water and the southward flow of cold deep water, as well as a diminished intensity of the clockwise and counterclockwise circulations. The GM component is also affected, with a potential reduction in eddy-induced transports due to weaker wind-driven circulation. This change in the GM component results in a diminished effect on the positive and negative values, as well as the clockwise and counterclockwise circulations, indicating a less efficient transport of heat and other properties.\\
+
+\noindent Consequently, the Residual MOC displays a weakened circulation pattern, reflecting the combined effects of the reduced Eulerian and GM components. For the strong wind scenario, the spatial plot shows an increase in the intensity of the Eulerian component of the MOC, evidenced by larger positive and negative values, due to stronger wind-driven circulation. The clockwise and counterclockwise circulations are also intensified, resulting in a more effective redistribution of heat and other properties. The GM component also increases, as enhanced wind stress leads to more energetic eddy activity and larger eddy-induced transports. This change in the GM component results in an amplified effect on the positive and negative values, as well as the clockwise and counterclockwise circulations, indicating a more efficient transport of heat and other properties. As a result, the Residual MOC exhibits a more vigorous circulation, reflecting the combined impacts of the intensified Eulerian and GM components.\\
+
+
+\noindent Figure \ref{fig:R2b} shows the plot of the maximum zonal wind stress dominated by zonally averaged time versus the maximum subpolar cell of the residual MOC. This plot illustrates the relationship between wind stress and ocean circulation, showing a positive correlation between wind stress and both the ACC transport and the strength of the subpolar cell. This provides clear evidence of the circulation's response to wind forcing. In the sensitivity simulation with modified wind stress, there is an intensification and a poleward shift of ACC transport, consistent with previous studies \citep{boning2008response}. 
+
+
+
+\begin{figure}
+    \begin{center}
+    \adjustimage{max size={1\linewidth}{1\paperheight}}{result pics/Result 1.jpg}
+    \caption{Eulerian, GM and residual component for Control, Weak and Strong Wind Experiment}
+    \addcontentsline{toc}{subsection}{\protect\numberline{}Figure \ref{fig:R1}: Eulerian, GM and residual component for each simulation}
+    \label{fig:R1}
+    \end{center}
+\end{figure}
+
+\begin{figure}
+    \begin{center}
+    \adjustimage{max size={1\linewidth}{1\paperheight}}{result pics/Result 2b.jpg}
+    \caption{Time Mean Zonally Averaged Zonal Wind Stress Maximum versus Maximum of the Subpolar cell of the Residual MOC}
+    \addcontentsline{toc}{subsection}{\protect\numberline{}Figure \ref{fig:R2b}: Wind Stress Maximum versus Maximum of the Subpolar cell of the Residual MOC}
+    \label{fig:R2b}
+    \end{center}
+\end{figure}
+
+
+\subsection{Wind-Forced Southern Ocean Ventilation: Insights from Mixed Layer Depths and Age Tracer}
+Examining the effects of wind forcing on ocean ventilation was crucial for enhancing our understanding of the ocean's role in regulating the global climate system. \\
+
+\noindent Maps (Fig. \ref{fig:R3}) of the control, sensitivity, and response (i.e. sensitivity minus control) of the depths of the mixed layer of winter provide a spatial representation of the changes in the depths of the mixed layer due to wind forcing. These maps enhance our understanding of how wind forcing influences the vertical structure and ventilation of the ocean. The winter mixed layer depth maps for the control scenario display the baseline distribution under climatological atmospheric forcing. The response maps, calculated as the difference between the sensitivity and control scenarios, highlight the changes in winter mixed layer depths due to modified wind forcing. Positive values in the response maps indicate regions where mixed layer depths have become deeper in the sensitivity scenario, while negative values indicate regions with shallower mixed layers. This map helps to identify the areas where wind forcing has the most significant impact on ocean mixing and ventilation. Considering the sensitivity experiment, it can be observed that the strong wind experiment, characterized by intensified wind stress, results in deeper mixed layer depths in some regions compared to the control simulation.  Conversely, the weak wind experiment yields a negative response in certain areas because the reduction in wind stress leads to more efficient horizontal transport of heat and salt, resulting in stronger stratification and a shallower mixed layer in some regions compared to the control simulation. Thus, it can be seen that the response for the strong wind experiment shows a positive bias than that of the weak wind experiment.
+
+\begin{figure}
+    \begin{center}
+    \adjustimage{max size={1\linewidth}{1\paperheight}}{result pics/Result 3.jpg}
+    \caption{Maps of the Control, Sensitivity, and Response of the Winter Mixed Layer Depths}
+    \addcontentsline{toc}{subsection}{\protect\numberline{}Figure \ref{fig:R3}: Maps of the Control, Sensitivity and Response of the Winter Mixed Layer Depths}
+    \label{fig:R3}
+    \end{center}
+\end{figure}
+
+\noindent Figure \ref{fig:R4} displays the zonal average of the winter mixed layer depth for each simulation. The trends observed in this figure are consistent with the results from Figure \ref{fig:R3}. The plot reveals overall higher values for the strong wind simulation compared to the control and weak wind simulations, which explains the positive bias observed in the strong wind response. This suggests that intensified wind stress leads to deeper mixed layers in certain regions, promoting more efficient vertical mixing and potentially influencing ocean ventilation and circulation patterns.
+
+
+\begin{figure}
+    \begin{center}
+    \adjustimage{max size={1\linewidth}{1\paperheight}}{result pics/Result 4.jpg}
+    \caption{Zonal Average of the Winter Mixed Layer Depth for Control, Weak and Strong Wind Experiment}
+    \addcontentsline{toc}{subsection}{\protect\numberline{}Figure \ref{fig:R4}: Zonal average of the winter mixed layer depth for each simulation}
+    \label{fig:R4}
+    \end{center}
+\end{figure}
+
+
+\begin{figure}
+    \begin{center}
+    \adjustimage{max size={1\linewidth}{\paperheight}}{result pics/Result 5.jpg}
+    \caption{Zonally Averaged Section of the Control, Sensitivity and Response of the Age Tracer Averaged over the last year}
+    \addcontentsline{toc}{subsection}{\protect\numberline{}Figure \ref{fig:R5}: Zonally Averaged Section of the Control, Sensitivity and Response of the Age Tracer }
+    \label{fig:R5}
+    \end{center}
+\end{figure}
+
+
+
+\noindent Figure \ref{fig:R5} presents the zonally averaged section of the control, sensitivity, and response of the age tracer averaged over the last year, showcasing the impact of wind forcing on ventilation processes. For all three simulations, it can be observed that the water mass ages are higher, particularly between 50 and 70$^{\circ}$ and at depths of 1000 to 4000m, with the exception of water mass ages at higher latitudes and the surface. This suggests that water masses at these depths are generally older, regardless of the wind stress scenario. To assess the impact of wind stress on ocean ventilation and circulation, we focused on the relative differences between the control and sensitivity simulations (weak and strong wind) at these depths. As usual, the control simulation shows the baseline distribution of water mass ages under climatological atmospheric forcing.\\
+
+\noindent The age tracer values between 1000 to 5000 meters in the weak wind sensitivity simulation are generally higher than those in the control simulation (i.e., positive response), suggesting that reduced wind stress further slows down circulation and reduces ventilation at these depths, leading to even older water masses. However, for the strong wind sensitivity simulation, the age tracer values between 1000 to 5000 meters are generally lower than those in the control simulation (i.e., negative response). This indicates that increased wind stress enhances ventilation and accelerates circulation at these depths, leading to relatively younger water masses. This is in line with why the winter mixed layer depth is deeper under this simulation.\\
+
+\noindent Overall, the results of this study underscore the significant impact of wind forcing on the behavior of the ACC, MOC, and Age tracer, which play crucial roles in global ocean circulation and climate dynamics.
+
+
+
+\newpage
+\section{Discussion}
+\rule{\textwidth}{0.4pt}
+In this paper, we presented a comparative analysis to investigate the effect of wind forcing on the southern ocean and ventilation.  The results of our study provided valuable insights into the impact of wind forcing on the behavior of the ACC, MOC, and Age tracer, which play crucial roles in global ocean circulation and climate dynamics. These results are consistent with previous research in the field, such as the findings by \cite{meredith2006circumpolar} and \cite{boning2008response}, which also demonstrated the significant influence of wind forcing on the ACC and MOC. Our analysis further extends this understanding by examining the response of ocean ventilation processes, as evidenced by the age tracer and mixed layer depth, under different wind stress scenarios.\\
+
+
+\noindent Our findings show a strong connection between wind stress and ACC transport, consistent with previous literature (e.g., \citealp{boning2008response}). Enhanced wind stress leads to a more vigorous and robust ACC transport, while reduced wind stress weakens ACC transport. This has implications for the redistribution of heat, salt, and other properties across the Southern Ocean, which can in turn affect ocean circulation patterns, heat uptake, and carbon sequestration. The study also highlights the relationship between the ACC and MOC, which is in line with previous research (e.g., \citealp{marshall2012closure}). The strength and position of the ACC have a direct impact on the strength and position of the MOC. Our findings reveal that changes in wind forcing affect the intensity and direction of the MOC, both in the Eulerian and GM components, ultimately impacting the Residual MOC. Stronger wind forcing leads to an intensified MOC, while weaker wind forcing weakens the MOC, which influences the transport of heat and other properties throughout the global ocean. \\
+
+\noindent Regarding ocean ventilation, our results indicate that changes in wind forcing significantly impact the depth of the winter mixed layer. Stronger wind forcing is associated with deeper mixed layers, promoting more efficient vertical mixing and potentially influencing ocean ventilation and circulation patterns. The age tracer analysis further demonstrates the effect of wind forcing on ocean ventilation processes. Reduced wind stress leads to slower circulation and reduced ventilation, resulting in older water masses, while increased wind stress enhances ventilation and accelerates circulation, leading to younger water masses.\\
+
+\noindent Despite the valuable contributions of our study, there are some limitations that should be considered when interpreting the results. One limitation is the resolution of the model used (MITgcm). Although the model has proven to be a useful tool in simulating oceanographic processes, the limited spatial resolution may not fully capture small-scale features and processes that could influence larger-scale circulation patterns. Higher-resolution models or the inclusion of subgrid-scale parameterizations could potentially improve the representation of these small-scale processes and their impacts on the ACC, MOC, and ventilation. Also, the complexity of the model and the choice of parameters used in the study may also affect the results. Real-world oceanographic processes are highly complex and can be influenced by numerous factors, such as air-sea interactions, eddies, and other mesoscale features. While our model attempts to capture the essential dynamics of these processes, it may not fully represent the complete range of interactions and feedback that occur in the real ocean. In addition, the choice of parameters used in the control and sensitivity simulations may influence the results. \\
+
+\noindent Future studies could explore the sensitivity of the model to different parameter choices, as well as the inclusion of other relevant processes, such as ice dynamics or biogeochemical cycles, to gain a more comprehensive understanding of the ocean's response to wind forcing.
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+\section{Conclusion}
+\rule{\textwidth}{0.4pt}
+The purpose of this study was to investigate the impact of wind forcing on Southern Ocean circulation and ventilation Using the MITgcm by addressing how changes in wind forcing affect the ocean circulation (ACC transport and MOC) and ventilation (mixed layer depths and age tracer) in the southern ocean and the implications for the global climate system.\\ 
+
+\noindent The main findings of the study reveal that stronger wind forcing leads to more vigorous ACC transport and MOC, as well as deeper mixed layers and enhanced ventilation. In contrast, weaker wind forcing results in reduced ACC transport and MOC, with shallower mixed layers and diminished ventilation. These outcomes emphasize the need to consider wind forcing when evaluating the Southern Ocean's role in the global climate system. The methodology employed in this study facilitated a detailed investigation of wind forcing's impact on Southern Ocean circulation. The methodology used in this study allowed for a detailed investigation of the impact of wind forcing on the Southern Ocean circulation.\\
+
+\noindent Despite the limitations associated with the study, such as model resolution, and model complexity, the research adds valuable insights into this crucial aspect of global ocean circulation.\\
+
+\noindent Overall, the findings of this study can serve as a foundation for future research in understanding and predicting the implications of changing wind patterns on the global ocean circulation and climate system.
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+\bibliographystyle{agsm}
+\bibliography{reference}
+%\addcontentsline{toc}{section}{Referencessss}
+
+\end{document}
